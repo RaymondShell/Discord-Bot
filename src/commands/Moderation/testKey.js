@@ -23,10 +23,10 @@ module.exports = {
             if (difference > 0) {
                 await interaction.reply(`The Key is Still Active For Another ${difference} days`)
             } else {
-                await interaction.reply("The Key Has Ran Out Of Duration and will be deleted")
+                await interaction.reply("The Key Has Ran Out Of Duration and will be Disabled")
                 const { error } = await supabase
                 .from('keys')
-                .delete()
+                .update({ out_of_duration: true })
                 .eq('key', key)
             }
         }

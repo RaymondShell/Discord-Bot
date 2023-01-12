@@ -36,7 +36,8 @@ module.exports = {
                     var user = obj.user
                     var finish = obj.finish
                     var activated = obj.activated
-                    entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish}`
+                    var disabled = obj.out_of_duration
+                    entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish} Disabled: ${disabled}`
                 };
                 await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
             } else {
