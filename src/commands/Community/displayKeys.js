@@ -26,18 +26,22 @@ module.exports = {
             .select('*')
             .eq('user', userid)
             true_data = data.data
-            var entire_data = "";
-            const Embed = new EmbedBuilder()
-            Embed.setTitle('Keys')
-            for (const obj of true_data) {
-                var keyss = obj.key
-                var length = obj.length
-                var user = obj.user
-                var finish = obj.finish
-                var activated = obj.activated
-                entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish}`
-            };
-            await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
+            if (true_data.length > 0) {
+                var entire_data = "";
+                const Embed = new EmbedBuilder()
+                Embed.setTitle('Keys')
+                for (const obj of true_data) {
+                    var keyss = obj.key
+                    var length = obj.length
+                    var user = obj.user
+                    var finish = obj.finish
+                    var activated = obj.activated
+                    entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish}`
+                };
+                await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
+            } else {
+                await interaction.reply("This user does not have a key linked to their id")
+            }
         } else {
             await interaction.reply("You Are Not The Owner")
         }

@@ -7,7 +7,6 @@ module.exports = {
     .setName('getrole')
     .setDescription('Gives Buyer Role'),
     async execute(interaction, client) {
-        const key = interaction.options.getString("key")
         const user = await supabase
         .from('keys')
         .select('activated')
