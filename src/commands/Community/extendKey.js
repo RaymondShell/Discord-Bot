@@ -20,22 +20,26 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        const key = interaction.options.getString("key")
-        const extension = interaction.options.getString("duration")
-        const date = await supabase
-        .from('keys')
-        .select('finish')
-        .eq('key', key)
-        if (date.data.length !== 0) {
-            var true_date = date.data[0].finish
-            extendedDate = addDays(true_date, extension)
-            const { error } = await supabase
-                .from('keys')
-                .update({ finish: extendedDate })
-                .eq('key', key)
-            await interaction.reply({ content:"The Key ```"+ key+"``` was extended until "+extendedDate, ephemeral: true })
+        if (interaction.member.roles.cache.find(r => r.name == "Whitelister")) {
+            const key = interaction.options.getString("key")
+            const extension = interaction.options.getString("duration")
+            const date = await supabase
+            .from('keys')
+            .select('finish')
+            .eq('key', key)
+            if (date.data.length !== 0) {
+                var true_date = date.data[0].finish
+                extendedDate = addDays(true_date, extension)
+                const { error } = await supabase
+                    .from('keys')
+                    .update({ finish: extendedDate })
+                    .eq('key', key)
+                await interaction.reply({ content:"The Key ```"+ key+"``` was extended until "+extendedDate, ephemeral: true })
+            } else {
+                await interaction.reply({ content:`Either Your Key is Not Activated Or You Put The Wrong Key In Retard`, ephemeral: true })
+            }
         } else {
-            await interaction.reply({ content:`Either Your Key is Not Activated Or You Put The Wrong Key In Retard`, ephemeral: true })
+            await interaction.reply("You Do Not Have Whitelister Perms")
         }
         
     }

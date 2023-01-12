@@ -14,12 +14,16 @@ module.exports = {
         )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        const key = interaction.options.getString("key")
-        const user = await supabase
-        .from('keys')
-        .delete()
-        .eq('key', key)
-        await interaction.reply(`The Key ${key} and all relevant data linked to that key has been deleted`)
+        if (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) {
+            const key = interaction.options.getString("key")
+            const user = await supabase
+            .from('keys')
+            .delete()
+            .eq('key', key)
+            await interaction.reply(`The Key ${key} and all relevant data linked to that key has been deleted`)
+        } else {
+            await interaction.reply("You Are Not The Owner")
+        }
     }
 
 }

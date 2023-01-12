@@ -26,17 +26,21 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        const duration = interaction.options.getString('length')
-        const amount = interaction.options.getString('amount')
-        keys = ""
-        for (let i=0; i<amount; i++) {
-            hash = generateKey(interaction.user.id, duration)
-            const { error } = await supabase
-            .from('keys')
-            .insert({ key: hash, length: duration})
-            keys += `\n${hash}`
+        if (interaction.member.roles.cache.find(r => r.name == "Whitelister")) {
+            const duration = interaction.options.getString('length')
+            const amount = interaction.options.getString('amount')
+            keys = ""
+            for (let i=0; i<amount; i++) {
+                hash = generateKey(interaction.user.id, duration)
+                const { error } = await supabase
+                .from('keys')
+                .insert({ key: hash, length: duration})
+                keys += `\n${hash}`
+            }
+            await interaction.reply("```"+keys+"```")
+        } else {
+            await interaction.reply("You Do Not Have Whitelister Perms")
         }
-        await interaction.reply("```"+keys+"```")
     }
 
 }

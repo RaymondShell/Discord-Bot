@@ -14,29 +14,33 @@ module.exports = {
         )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        const userid = interaction.options.getString("userid")
-        const keys = await supabase
-        .from('keys')
-        .select('key')
-        var array = []
-        keys.data.forEach(key => array.push(key.key))
-        const data = await supabase
-        .from('keys')
-        .select('*')
-        .eq('user', userid)
-        true_data = data.data
-        var entire_data = "";
-        const Embed = new EmbedBuilder()
-        Embed.setTitle('Keys')
-        for (const obj of true_data) {
-            var keyss = obj.key
-            var length = obj.length
-            var user = obj.user
-            var finish = obj.finish
-            var activated = obj.activated
-            entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish}`
-        };
-        await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
+        if (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) {
+            const userid = interaction.options.getString("userid")
+            const keys = await supabase
+            .from('keys')
+            .select('key')
+            var array = []
+            keys.data.forEach(key => array.push(key.key))
+            const data = await supabase
+            .from('keys')
+            .select('*')
+            .eq('user', userid)
+            true_data = data.data
+            var entire_data = "";
+            const Embed = new EmbedBuilder()
+            Embed.setTitle('Keys')
+            for (const obj of true_data) {
+                var keyss = obj.key
+                var length = obj.length
+                var user = obj.user
+                var finish = obj.finish
+                var activated = obj.activated
+                entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish}`
+            };
+            await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
+        } else {
+            await interaction.reply("You Are Not The Owner")
+        }
         
     }
 
