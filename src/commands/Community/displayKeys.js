@@ -15,8 +15,10 @@ module.exports = {
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
         if (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) {
-            const userid = interaction.options.getString("userid")
-            const keys = await supabase
+            var userid = interaction.options.getString("userid")
+            if (userid.startsWith('<@') && userid.endsWith('>')) {
+              userid = userid.slice(2, -1);
+              const keys = await supabase
             .from('keys')
             .select('key')
             var array = []
@@ -40,6 +42,7 @@ module.exports = {
                     entire_data += `\nKey: ${keyss} Length: ${length} UserId: ${user} Activated: ${activated} FinishDate: ${finish} Disabled: ${disabled}`
                 };
                 await interaction.reply({ content: "```"+entire_data+"```", ephemeral: true })
+            }
             } else {
                 await interaction.reply("This user does not have a key linked to their id")
             }
