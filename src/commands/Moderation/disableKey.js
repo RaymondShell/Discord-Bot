@@ -6,19 +6,19 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName('disablekey')
     .setDescription('disables key')
-    .addStringOption((option) =>
+    .addUserOption((option) =>
         option
-        .setName("userid")
-        .setDescription("userid to disable")
+        .setName("user")
+        .setDescription("user to disable")
         .setRequired(true)
     ),
     async execute(interaction, client) {
-        const userid = interaction.options.getString("userid")
+        const userid = interaction.options.getUser("user")
         if (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) {
             const disable = await supabase
             .from('keys')
             .update({ out_of_duration: true})
-            .eq('user', userid)
+            .eq('user', userid.id)
             await interaction.reply("The Users Key Has Been Disabled")
         }
     }
