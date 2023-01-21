@@ -14,7 +14,7 @@ module.exports = {
         )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        if ((interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]"))) {
+        if ((interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) || (interaction.member.roles.cache.find(r => r.name == "English"))) {
             var userid = interaction.options.getUser("user")
             const keys = await supabase
             .from('keys')

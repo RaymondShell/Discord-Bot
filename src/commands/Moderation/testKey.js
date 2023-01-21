@@ -19,7 +19,7 @@ module.exports = {
         .select('finish')
         .eq('key', key)
         const difference = differenceDates(finish.data[0].finish)
-        if (interaction.member.roles.cache.find(r => r.name == "Buyer") || (interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]"))) {
+        if (interaction.member.roles.cache.find(r => r.name == "Buyer") || (interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) || (interaction.member.roles.cache.find(r => r.name == "English"))) {
             if (difference > 0) {
                 await interaction.reply(`The Key is Still Active For Another ${difference} days`)
             } else {

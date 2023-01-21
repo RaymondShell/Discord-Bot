@@ -14,7 +14,7 @@ module.exports = {
     ),
     async execute(interaction, client) {
         const userid = interaction.options.getUser("user")
-        if ((interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]"))) {
+        if ((interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) || (interaction.member.roles.cache.find(r => r.name == "English"))) {
             const disable = await supabase
             .from('keys')
             .update({ out_of_duration: true})
