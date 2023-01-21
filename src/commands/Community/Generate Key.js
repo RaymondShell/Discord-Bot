@@ -27,7 +27,7 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        if (interaction.member.roles.cache.find(r => r.name == "Whitelister")) {
+        if (interaction.member.roles.cache.find(r => r.name == "Whitelister") || (interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]"))) {
             const duration = interaction.options.getString('length')
             const amount = interaction.options.getString('amount')
             keys = ""
