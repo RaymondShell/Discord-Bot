@@ -37,6 +37,7 @@ module.exports = {
                 .from('keys')
                 .insert({ key: hash, length: duration})
                 keys += `\n${hash}`
+                console.log(error);
             }
             await interaction.reply("```"+keys+"```")
         } else {
