@@ -27,29 +27,38 @@ module.exports = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
-        if (interaction.member.roles.cache.find(r => r.name == "Whitelister") || (interaction.member.roles.cache.find(r => r.name == "Fuhrer")) || (interaction.member.roles.cache.find(r => r.name == "[OWNER]")) || (interaction.member.roles.cache.find(r => r.name == "English"))) {
-            const duration = interaction.options.getString('length')
-            const amount = interaction.options.getString('amount')
-            keys = ""
-            for (let i=0; i<amount; i++) {
-                hash = generateKey(interaction.user.id, duration)
+        if (interaction.member.roles.cache.some(r => 
+            ["Whitelister", "Fuhrer", "[OWNER]", "English"].includes(r.name))) {
+            const duration = interaction.options.getString('length');
+            const amount = parseInt(interaction.options.getString('amount'), 10);
+
+            // Acknowledge the interaction
+            await interaction.deferReply();
+
+            let keys = "";
+            for (let i = 0; i < amount; i++) {
+                const hash = generateKey(interaction.user.id, duration);
                 const { error } = await supabase
-                .from('keys')
-                .insert({ key: hash, length: duration})
-                keys += `\n${hash}`
-                console.log(error);
+                    .from('keys')
+                    .insert({ key: hash, length: duration });
+                if (error) {
+                    console.log(error);
+                    continue; // Skip adding this key if there's an error
+                }
+                keys += `\n${hash}`;
             }
-            await interaction.deferReply("```"+keys+"```");
+
+            // Send the response
+            await interaction.editReply(`Generated Keys:\n\`\`\`${keys}\`\`\``);
         } else {
-            await interaction.reply("You Do Not Have Whitelister Perms")
+            await interaction.reply("You do not have Whitelister permissions.");
         }
     }
-
 }
 
 function generateKey(userId, Duration) {
-    random_num = Math.floor(Math.random() * 999999999);
-    input = userId+random_num+Duration
+    const randomNum = Math.floor(Math.random() * 999999999);
+    const input = userId + randomNum + Duration;
     const hash = crypto.createHash('sha256').update(input).digest('base64');
-    return hash
+    return hash;
 }
