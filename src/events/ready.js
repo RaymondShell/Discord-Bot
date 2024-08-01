@@ -50,7 +50,7 @@ module.exports = {
         checkAndRemoveInfractions();
 
         // Set an interval to check every 10 seconds (10000 ms)
-        setInterval(checkAndRemoveInfractions, 10000);
+        setInterval(checkAndRemoveInfractions, 1000);
 
         // Function to set the bot's presence
         async function pickPresence() {
