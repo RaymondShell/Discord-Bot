@@ -6,26 +6,26 @@ const supabase = createClient(process.env.dburl, process.env.dbkey);
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('generatekeys')
-    .setDescription('Generates a Key')
-    .addStringOption((option) => 
-        option
-        .setName('length')
-        .setDescription('Generate a Key with Specified Duration')
-        .setRequired(true)
-        .addChoices(
-            { name: '1 Day', value: '1' },
-            { name: '7 Day', value: '7' },
-            { name: '30 Day', value: '30' },
-            { name: '360 Day', value: '360' },
-        ))
-    .addStringOption((option) => 
-        option
-        .setName('amount')
-        .setDescription('Amount of Keys To Generate')
-        .setRequired(true)
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        .setName('generatekeys')
+        .setDescription('Generates a Key')
+        .addStringOption((option) => 
+            option
+            .setName('length')
+            .setDescription('Generate a Key with Specified Duration')
+            .setRequired(true)
+            .addChoices(
+                { name: '1 Day', value: '1' },
+                { name: '7 Day', value: '7' },
+                { name: '30 Day', value: '30' },
+                { name: '360 Day', value: '360' },
+            ))
+        .addStringOption((option) => 
+            option
+            .setName('amount')
+            .setDescription('Amount of Keys To Generate')
+            .setRequired(true)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction, client) {
         // Check for required roles
         const roles = ["Whitelister", "Fuhrer", "[OWNER]", "English"];
@@ -59,9 +59,9 @@ module.exports = {
                 return await interaction.editReply("There was an error generating the keys. Please try again.");
             }
 
-            // Format the keys for the response
-            const keysString = keysData.map(data => data.key).join('\n');
-            await interaction.editReply(`Generated Keys:\n\`\`\`${keysString}\`\`\``);
+            // Extract keys and send them
+            const keys = keysData.map(data => data.key);
+            await sendKeys(interaction, keys);
         } catch (error) {
             console.error('Unexpected error:', error);
             await interaction.editReply("An unexpected error occurred. Please try again.");
@@ -74,4 +74,22 @@ function generateKey(userId, duration) {
     const input = userId + randomNum + duration;
     const hash = crypto.createHash('sha256').update(input).digest('base64');
     return hash;
+}
+
+async function sendKeys(interaction, keys) {
+    const MAX_MESSAGE_LENGTH = 2000; // Discord's maximum message length
+    let message = "Generated Keys:\n```";
+    for (const key of keys) {
+        if (message.length + key.length + 4 > MAX_MESSAGE_LENGTH) {
+            // Send the current message if adding another key would exceed the limit
+            message += "```";
+            await interaction.followUp({ content: message });
+            message = "```"; // Reset the message
+        }
+        message += `\n${key}`;
+    }
+    message += "```";
+
+    // Send the final part of the message
+    await interaction.followUp({ content: message });
 }
