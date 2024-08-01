@@ -22,7 +22,7 @@ module.exports = {
               const { error } = await supabase
               .from('keys')
               .delete()
-              .eq('deleteallsafeguard', 1537);
+              //.eq('deleteallsafeguard', 1537);
               await interaction.reply(`All the Keys Have Been Deleted`);
             } else if (bool === 'false') {
               await interaction.reply("You are lucky i added this as a failsafe");
