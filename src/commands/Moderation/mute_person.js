@@ -12,7 +12,7 @@ module.exports = {
         ),
     async execute(interaction, client) {
         // Check for the required permissions
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
+        if (interaction.member.permissions.has(PermissionFlagsBits.ModerateMembers)) {
             return await interaction.reply('You do not have permission to use this command.');
         }
 
