@@ -39,6 +39,7 @@ module.exports = {
                 keys += `\n${hash}`
                 console.log(error);
             }
+            interaction.deferReply();
             await interaction.reply("```"+keys+"```")
         } else {
             await interaction.reply("You Do Not Have Whitelister Perms")
