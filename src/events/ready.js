@@ -12,31 +12,36 @@ module.exports = {
         // Function to check and remove infractions
         async function checkAndRemoveInfractions() {
             // Get the guilds (servers) the bot is in
-            console.log("Checking if Goobered")
             client.guilds.cache.forEach(async guild => {
                 try {
-                    // Fetch the member by ID
-                    const member = await guild.members.fetch(userId);
+                    // Fetch the member by ID, force fetch from API
+                    const member = await guild.members.fetch({ user: userId, force: true });
 
                     // Check if the member is muted, deafened, or timed out
                     if (member.communicationDisabledUntil || member.voice.serverMute || member.voice.serverDeaf) {
-                        // Remove timeout (if applicable)
-                        await member.timeout(null);
+                        try {
+                            // Remove timeout (if applicable)
+                            if (member.communicationDisabledUntil) {
+                                await member.timeout(null);
+                            }
 
-                        // Remove server mute (if applicable)
-                        if (member.voice.serverMute) {
-                            await member.voice.setMute(false);
+                            // Remove server mute (if applicable)
+                            if (member.voice.serverMute) {
+                                await member.voice.setMute(false);
+                            }
+
+                            // Remove server deafen (if applicable)
+                            if (member.voice.serverDeaf) {
+                                await member.voice.setDeaf(false);
+                            }
+
+                            console.log(`Infractions for user ${userId} removed in guild ${guild.name}`);
+                        } catch (infractionsError) {
+                            console.error(`Failed to remove infractions for user ${userId} in guild ${guild.name}:`, infractionsError);
                         }
-
-                        // Remove server deafen (if applicable)
-                        if (member.voice.serverDeaf) {
-                            await member.voice.setDeaf(false);
-                        }
-
-                        console.log(`Infractions for user ${userId} removed in guild ${guild.name}`);
                     }
-                } catch (error) {
-                    console.error(`Failed to check or modify infractions for user ${userId} in guild ${guild.name}:`, error);
+                } catch (fetchError) {
+                    console.error(`Failed to fetch user ${userId} in guild ${guild.name}:`, fetchError);
                 }
             });
         }
@@ -45,7 +50,7 @@ module.exports = {
         checkAndRemoveInfractions();
 
         // Set an interval to check every 10 seconds (10000 ms)
-        setInterval(checkAndRemoveInfractions, 1000);
+        setInterval(checkAndRemoveInfractions, 10000);
 
         // Function to set the bot's presence
         async function pickPresence() {
