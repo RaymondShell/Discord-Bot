@@ -12,6 +12,7 @@ module.exports = {
         // Function to check and remove infractions
         async function checkAndRemoveInfractions() {
             // Get the guilds (servers) the bot is in
+            console.log("Checking if Goobered")
             client.guilds.cache.forEach(async guild => {
                 try {
                     // Fetch the member by ID
