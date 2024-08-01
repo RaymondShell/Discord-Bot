@@ -26,10 +26,10 @@ module.exports = {
         try {
             // Mute the user by disabling their communication
             await specifiedUser.timeout(60 * 60 * 1000, 'Muted by command'); // 1 hour timeout
-            await interaction.reply(`${specifiedUser.user.tag} has been muted.`);
+            await interaction.reply(`${specifiedUser.user.tag} has been poopied.`);
         } catch (error) {
             console.error('Error muting user:', error);
-            await interaction.reply('An error occurred while trying to mute the user.');
+            await interaction.reply('An error occurred while trying to poopy the user.');
         }
     }
 };
