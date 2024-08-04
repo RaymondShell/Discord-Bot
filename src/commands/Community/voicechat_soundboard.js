@@ -13,9 +13,9 @@ module.exports = {
         ),
     async execute(interaction, client) {
         const voiceChannel = interaction.options.getChannel('channel');
-        if (!voiceChannel || voiceChannel.type !== ChannelType.GuildVoice) {
+        /*if (!voiceChannel || voiceChannel.type !== ChannelType.GuildVoice) {
             return interaction.reply({ content: 'Please provide a valid voice channel.', ephemeral: true });
-        }
+        }*/
 
         console.log(path.join(__dirname, "ear.mp3"))
 
